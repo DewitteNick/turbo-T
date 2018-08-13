@@ -3,6 +3,7 @@ import functions
 import commands
 import time
 import config
+import threading
 
 print('Version:\t' + discord.__version__ + '\n')
 
@@ -33,7 +34,7 @@ async def on_ready():
     print('ID', client.user.id, sep=': ')
     print('ready timestamp', time.time(), sep=': ')
     print('------')
-    await commands.set_status(client, 'use $help for info')
+    await functions.update_status(client)
 
 
 client.run(TOKEN)

@@ -1,7 +1,8 @@
 import response_submitter
-import random
+import asyncio
 import text_generator
 import commands
+import config
 
 
 async def execute_command(client, message):
@@ -63,3 +64,24 @@ async def strip_command(message):
     command = message.content.split(' ')[0] + ' '
     command_data = message.content[len(command):]
     return command_data
+
+
+async def update_status(client):        # Limit of ~ 5 changes per minute
+    while True:
+        # Display current server goal
+        if len(client.servers) >= config.get_server_target():
+            await commands.set_status(client, 'Reached ' + str(len(client.servers)) + ' active servers!')
+        else:
+            await commands.set_status(client, 'Almost ' + str(config.get_server_target()) + ' active servers!')
+        await asyncio.sleep(10)
+        # Display current users
+        users = 0
+        for server in client.servers:
+            for user in server.members:
+                if not user.bot:
+                    users += 1
+        await commands.set_status(client, 'Serving ' + str(users) + ' users')
+        await asyncio.sleep(10)
+        # Display help
+        await commands.set_status(client, 'start commands with $')
+        await asyncio.sleep(20)
