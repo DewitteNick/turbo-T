@@ -39,10 +39,6 @@ async def execute_command(client, message):
     elif message.content.startswith('$dice'):
         await commands.dice(client, message)
 
-    # Youtube search
-    elif message.content.startswith('$yt'):
-        await commands.yt_search(client, message)
-
     # Default message when command is not found.
     else:
         await response_submitter.reply_channel(client, message, await text_generator.command_not_found())

@@ -106,5 +106,4 @@ async def set_status(client, status):
     await client.change_presence(game=discord.Game(name=status))
 
 
-async def yt_search(client, message):
-    await response_submitter.reply_channel(client, message, 'We\'re working on this command right this second!')
+
