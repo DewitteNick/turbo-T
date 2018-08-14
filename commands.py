@@ -5,11 +5,10 @@ import random
 import discord
 import functions
 import time
-import config
 
 
 async def help(client, message):
-    keyword = await functions.strip_command(message)
+    keyword = await functions.strip_command(message.content)
     if command_list.command_exists(keyword):
         command_help = await command_list.get_command_help(keyword)
         response = await text_generator.generate_help(command_help)
@@ -33,7 +32,7 @@ async def ban(client, message):
         return
 
     # get the user to ban by name
-    name_to_ban = await functions.strip_command(message)
+    name_to_ban = await functions.strip_command(message.content)
     banned_member = message.server.get_member_named(name_to_ban)
 
     # ban an existing user, or show a message the user doesn't exist
@@ -53,7 +52,7 @@ async def unban(client, message):
         return
 
     # get the user to unban by name
-    name_to_unban = await functions.strip_command(message)
+    name_to_unban = await functions.strip_command(message.content)
     banned_list = await client.get_bans(message.server)
     for user in banned_list:
         if user.name == name_to_unban:
@@ -78,12 +77,12 @@ async def add_bot_to_server(client, message):
 
 
 async def broadcast(client, message):
-    response = await functions.strip_command(message)
+    response = await functions.strip_command(message.content)
     await response_submitter.reply_broadcast(client, message, response)
 
 
 async def dice(client, message):
-    size = await functions.strip_command(message)
+    size = await functions.strip_command(message.content)
     try:
         sides = int(size)
         if sides < 2:
@@ -106,4 +105,17 @@ async def set_status(client, status):
     await client.change_presence(game=discord.Game(name=status))
 
 
+async def radio(client, message):
+    command = await functions.strip_command(message.content)
+    # start the radio
+    if command.startswith('join'):
+        channel_name = await functions.strip_command(command)
+        voice_channel = None
+        for channel in message.server.channels:
+            if channel.name == channel_name:
+                voice_channel = channel
 
+        if voice_channel is not None:
+            await client.join_voice_channel(voice_channel)
+        else:
+            await response_submitter.reply_channel(client, message, 'Could not find channel "' + channel_name + '"')

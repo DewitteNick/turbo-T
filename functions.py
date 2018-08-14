@@ -40,6 +40,10 @@ async def execute_command(client, message):
     elif message.content.startswith('$dice'):
         await commands.dice(client, message)
 
+    # Voice channel music playback
+    elif message.content.startswith('$radio'):
+        await commands.radio(client, message)
+
     # Default message when command is not found.
     else:
         await response_submitter.reply_channel(client, message, await text_generator.command_not_found())
@@ -61,8 +65,8 @@ async def respond_to_words(client, message, words):
 
 
 async def strip_command(message):
-    command = message.content.split(' ')[0] + ' '
-    command_data = message.content[len(command):]
+    command = message.split(' ')[0] + ' ' #TODO changed message.content.split to message.split. check for occurences in code.
+    command_data = message[len(command):]
     return command_data
 
 
