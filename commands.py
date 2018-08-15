@@ -5,6 +5,7 @@ import random
 import discord
 import functions
 import time
+from ctypes.util import find_library
 
 
 async def help(client, message):
@@ -105,9 +106,9 @@ async def set_status(client, status):
     await client.change_presence(game=discord.Game(name=status))
 
 
-async def radio(client, message):
+async def radio(client, message):       #TODO refactor this so methods can use each other...
     command = await functions.strip_command(message.content)
-    # start the radio
+    # join a channel
     if command.startswith('join'):
         channel_name = await functions.strip_command(command)
         voice_channel = None
@@ -117,5 +118,27 @@ async def radio(client, message):
 
         if voice_channel is not None:
             await client.join_voice_channel(voice_channel)
+            discord.opus.load_opus(find_library('opus'))
         else:
             await response_submitter.reply_channel(client, message, 'Could not find channel "' + channel_name + '"')
+    # start playing music
+    if command.startswith('play'):
+        if client.is_voice_connected(message.server):
+            vc = client.voice_client_in(message.server)
+            player = vc.create_ffmpeg_player('assets/audio/me&u-nero.mp3')
+            player.start()
+
+
+        else:
+            await response_submitter.reply_channel(client, message, 'Specify the voice channel I should join with `$radio join <channel name>`, please.')
+
+
+
+
+
+    # Stop playing music
+    if command.startswith('stop') or command.startswith('abort'):
+        print('Implement stop audio playback')
+    # Leave voice channel
+    if command.startswith('abort'):
+        print('Implement leave audio channel')
