@@ -89,3 +89,11 @@ async def update_status(client):        # Limit of ~ 5 changes per minute
         # Display help
         await commands.set_status(client, 'start commands with $')
         await asyncio.sleep(20)
+
+
+async def get_voice_client(client, message):
+    voice_client = None
+    for vc in client.voice_clients:
+        if message.server is vc.server:
+            voice_client = vc
+    return voice_client

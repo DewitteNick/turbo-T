@@ -45,13 +45,7 @@ commands = {
     'radio': {
         'name': '$radio',
         'help_message': 'Control the behaviour of the bot in voice channels. Requires the `turbo-T_commander` role.\n(once it\'s finished...)', #TODO
-        'usage': '$radio <action>',
-        'examples': {
-            '$radio join <voice channel>': 'Join the mentioned channel. Must be a voice channel.',
-            '$radio play': 'Start radio playback',
-            '$radio stop': 'Stop radio playback',
-            '$radio abort': 'Stop radio playback and leave channel'
-        }
+        'usage': '$radio <action>'
     }
 }
 

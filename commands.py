@@ -106,39 +106,30 @@ async def set_status(client, status):
     await client.change_presence(game=discord.Game(name=status))
 
 
-async def radio(client, message):       #TODO refactor this so methods can use each other...
+async def radio(client, message):       #TODO refactor this so methods can use the save playerstream object
     command = await functions.strip_command(message.content)
-    # join a channel
+    # Join discord voice channel
     if command.startswith('join'):
         channel_name = await functions.strip_command(command)
-        voice_channel = None
         for channel in message.server.channels:
             if channel.name == channel_name:
-                voice_channel = channel
-
-        if voice_channel is not None:
-            await client.join_voice_channel(voice_channel)
-            discord.opus.load_opus(find_library('opus'))
-        else:
-            await response_submitter.reply_channel(client, message, 'Could not find channel "' + channel_name + '"')
-    # start playing music
-    if command.startswith('play'):
-        if client.is_voice_connected(message.server):
-            vc = client.voice_client_in(message.server)
-            player = vc.create_ffmpeg_player('assets/audio/me&u-nero.mp3')
-            player.start()
-
-
-        else:
-            await response_submitter.reply_channel(client, message, 'Specify the voice channel I should join with `$radio join <channel name>`, please.')
-
-
-
-
-
+                await client.join_voice_channel(channel)
+                discord.opus.load_opus(find_library('opus'))
+    # Start playing music
+    elif command.startswith('play'):
+        voice_client = await functions.get_voice_client(client, message)
+        player = await voice_client.create_ytdl_player('https://www.youtube.com/watch?v=WeKiWy1DgRg') #TODO get player in the stop function
+        #TODO save player object in a global array with the server ID as index? check that array before starting playback, when pausing, ...
+        player.start()
     # Stop playing music
-    if command.startswith('stop') or command.startswith('abort'):
-        print('Implement stop audio playback')
-    # Leave voice channel
-    if command.startswith('abort'):
-        print('Implement leave audio channel')
+    elif command.startswith('pause'):
+        await response_submitter.reply_channel(client, message, 'Unable to pause music at this time. use leave to stop music.')
+    # Leave discord voice channel
+    elif command.startswith('leave'):
+        voice_client = await functions.get_voice_client(client, message)
+        await voice_client.disconnect()
+
+    # Invalid radio option
+    else:
+        await response_submitter.reply_channel(client, message, 'Invalid argument')
+
