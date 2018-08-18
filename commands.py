@@ -6,6 +6,7 @@ import discord
 import functions
 import time
 from ctypes.util import find_library
+import os
 
 
 players = {}
@@ -117,7 +118,7 @@ async def radio(client, message):
         await radio_join(client, message, parameter)
     # Start playing music
     elif command.startswith('play'):
-        await radio_play(client, message, parameter)
+        await radio_play(client, message)
     # Pause music playback
     elif command.startswith('pause'):
         players[message.server.id]['player'].pause()
@@ -151,15 +152,5 @@ async def radio_join(client, message, channel_name):
         await response_submitter.reply_channel(client, message, 'No valid channel found.')
 
 
-async def radio_play(client, message, music):
-    voice_client = await functions.get_voice_client(client, message)
-    # Abort if no voice client is found
-    if voice_client is None:
-        raise TypeError('No voice client present. Need to join a channel.')
-    # Create a player if none exists yet
-    if message.server.id not in players:
-        voice_client = await functions.get_voice_client(client, message)
-        players[message.server.id]['player'] = await voice_client.create_ytdl_player('https://www.youtube.com/watch?v=WeKiWy1DgRg')
-        players[message.server.id]['player'].start()
-    else:
-        players[message.server.id]['player'].resume()
+async def radio_play(client, message):
+
