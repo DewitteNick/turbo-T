@@ -109,35 +109,24 @@ async def set_status(client, status):
     await client.change_presence(game=discord.Game(name=status))
 
 
-async def radio(client, message):       #TODO refactor so there's a simple start/stop for the radio.
+async def radio(client, message):
     command = await functions.strip_command(message.content)
+    parameter = await functions.strip_command(command)
     # Join discord voice channel
     if command.startswith('join'):
-        channel_name = await functions.strip_command(command)
-        await radio_join(client, message, channel_name)
-
+        await radio_join(client, message, parameter)
     # Start playing music
-    elif command.startswith('start'):
-        voice_client = await functions.get_voice_client(client, message)
-        # player = await voice_client.create_ytdl_player('https://www.youtube.com/watch?v=WeKiWy1DgRg')
-        players[message.server.id] = await voice_client.create_ytdl_player('https://www.youtube.com/watch?v=WeKiWy1DgRg')
-        players[message.server.id].start()
-
-
+    elif command.startswith('play'):
+        await radio_play(client, message, parameter)
     # Pause music playback
     elif command.startswith('pause'):
-        # await response_submitter.reply_channel(client, message, 'Unable to pause music at this time. use leave to stop music.')
-        players[message.server.id].pause()
-    elif command.startswith('play'):
-        players[message.server.id].resume()
-
-
+        players[message.server.id]['player'].pause()
     # Leave discord voice channel
     elif command.startswith('leave'):
+        # No parameter
         voice_client = await functions.get_voice_client(client, message)
         await voice_client.disconnect()
-
-
+        players.pop(message.server.id)
     # Invalid radio option
     else:
         await response_submitter.reply_channel(client, message, 'Invalid argument')
@@ -160,3 +149,17 @@ async def radio_join(client, message, channel_name):
         discord.opus.load_opus(find_library('opus'))
     else:
         await response_submitter.reply_channel(client, message, 'No valid channel found.')
+
+
+async def radio_play(client, message, music):
+    voice_client = await functions.get_voice_client(client, message)
+    # Abort if no voice client is found
+    if voice_client is None:
+        raise TypeError('No voice client present. Need to join a channel.')
+    # Create a player if none exists yet
+    if message.server.id not in players:
+        voice_client = await functions.get_voice_client(client, message)
+        players[message.server.id]['player'] = await voice_client.create_ytdl_player('https://www.youtube.com/watch?v=WeKiWy1DgRg')
+        players[message.server.id]['player'].start()
+    else:
+        players[message.server.id]['player'].resume()
