@@ -1,2 +1,4 @@
 config.py
-assets/audio/*.mp3
+assets/audio/
+.idea
+__pycache__
