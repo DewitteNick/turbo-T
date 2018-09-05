@@ -7,9 +7,13 @@ import functions
 import time
 from ctypes.util import find_library
 import os
+import io
+import wave
 
 
-players = {}
+voice_players = {}
+music_dir = 'assets/audio/'
+stream_block_size = 4096
 
 
 async def help(client, message):
@@ -121,13 +125,15 @@ async def radio(client, message):
         await radio_play(client, message)
     # Pause music playback
     elif command.startswith('pause'):
-        players[message.server.id]['player'].pause()
+        print('pausing...')
+        voice_players[message.server.id]['player'].pause()
+        print('paused.')
     # Leave discord voice channel
     elif command.startswith('leave'):
         # No parameter
         voice_client = await functions.get_voice_client(client, message)
         await voice_client.disconnect()
-        players.pop(message.server.id)
+        voice_players.pop(message.server.id)
     # Invalid radio option
     else:
         await response_submitter.reply_channel(client, message, 'Invalid argument')
@@ -153,4 +159,50 @@ async def radio_join(client, message, channel_name):
 
 
 async def radio_play(client, message):
+    # Create a switch to check if music is already playing, if it is, add the song to the existing stream
+    # #TODO
 
+    # Defining discord variables & settings
+    vc = message.server.voice_client
+    sid = message.server.id
+    vc.encoder_options(sample_rate=48000, channels=2)   # bitrate = 16 bit
+
+    # Defining local variables
+    music_to_play = []
+    music_played = []
+    buffer = io.BytesIO()
+    voice_players[sid] = {'stream': io.BufferedRandom(buffer)}
+
+    # Check if audio is playing, and if an player exists
+    print('Player exists:', 'player' in voice_players[sid])
+    print(voice_players[sid]['stream'])
+
+    # Declare audio settings and generate audio player
+    voice_players[sid] = {'player': vc.create_stream_player(voice_players[sid]['stream'])}
+    # Discover wav files
+    for file in os.scandir(music_dir):
+        if file.name.endswith('.wav'):
+            music_to_play.append(file.name)
+    # Remove files that do not mach certain requirements like sample- and bitrate
+    #TODO
+
+    # Add all matching songs to the stream
+    #TODO
+
+    # Play the stream
+    #TODO
+
+    # Remove this
+    while not voice_players[sid]['player'].is_done():
+        while len(music_to_play) > 0:
+            song_name = music_to_play.pop(random.randint(0, len(music_to_play) - 1))
+            music_played.append(song_name)
+            song = open(music_dir + song_name, 'rb')
+            voice_players[sid]['stream'].write(song.read())     #TODO fix --> KeyError: 'stream'
+            song.close()
+            voice_players[sid]['stream'].seek(0)
+            voice_players[sid].start()
+            time.sleep(300)     #TODO sleep for song duration
+        # Reset what music is already played
+        music_to_play = music_played
+        music_played = []
