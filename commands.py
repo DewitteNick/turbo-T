@@ -5,7 +5,16 @@ import random
 import discord
 import functions
 import time
+from ctypes.util import find_library
+import os
+import io
 import config
+import wave
+
+
+voice_players = {}
+music_dir = 'assets/audio/'
+stream_block_size = 4096
 
 
 async def help(client, message):
@@ -14,7 +23,12 @@ async def help(client, message):
         command_help = await command_list.get_command_help(keyword)
         response = await text_generator.generate_help(command_help)
     else:
-        response = await text_generator.command_not_found()
+        if not keyword:
+            # No command specified.
+            help_message = "“Always pass on what you have learned.” – Yoda"
+        else:
+            help_message = "No information could be found about `" + keyword + "`."
+        response = await text_generator.command_not_found(help_message)
     await response_submitter.reply_channel(client, message, response)
 
 
@@ -72,7 +86,7 @@ async def server_invite(client, message):
 
 async def add_bot_to_server(client, message):
     client_id = client.user.id
-    permissions = '2146958583'
+    permissions = config.get_permission_integer()
     link = 'https://discordapp.com/api/oauth2/authorize?client_id=' + client_id + '&permissions=' + permissions + '&scope=bot'
     await response_submitter.reply_channel(client, message, link)
 

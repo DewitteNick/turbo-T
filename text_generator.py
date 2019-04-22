@@ -19,8 +19,11 @@ async def generate_help(command):
     return response
 
 
-async def command_not_found():
-    response = 'Command could not be found.'
+async def command_not_found(response):
+    # if (invalid_command):
+    #     response = 'Command could not be found.'
+    # else:
+    #     response = 'No command specified.'
     response += '\nTry `$help <command>` for info about a command.'
     response += '\nList of valid commands:\n'
     response += '```AsciiDoc\n'

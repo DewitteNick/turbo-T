@@ -23,8 +23,11 @@ async def on_message(message):
         await functions.execute_command(client, message)
         return
 
-    #Execute these last, they should not be executed if a response is already sent.
-    await functions.respond_to_words(client, message, ['hi', 'hello', 'hey', 'hola', 'aloha', 'hallo'])
+    # Check server statusses, and report anomalities.
+    await functions.check_server_statusses([])
+
+    # Execute these last, they should not be executed if a response is already sent.
+    await functions.respond_to_words(client, message, ['hi', 'hello', 'hey', 'hola', 'aloha', 'hallo', 'yo'])
 
 
 @client.event

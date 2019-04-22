@@ -7,13 +7,13 @@ import config
 
 async def execute_command(client, message):
     # Help command
-    if message.content.startswith('$help '):
+    if message.content.startswith('$help'):
         await commands.help(client, message)
 
     # 8ball command
     elif message.content.startswith('$8ball'):
         await commands.eight_ball(client, message)
-        # 8ball should not delete the question
+        # 8ball should not delete the message.
         return
 
     # Ban command
@@ -42,7 +42,7 @@ async def execute_command(client, message):
 
     # Default message when command is not found.
     else:
-        await response_submitter.reply_channel(client, message, await text_generator.command_not_found())
+        await response_submitter.reply_channel(client, message, await text_generator.command_not_found("It appears this path hasn't been programmed yet..."))
 
     #remove the command the user entered to keep chat a bit cleaner
     await client.delete_message(message)
@@ -73,7 +73,7 @@ async def update_status(client):        # Limit of ~ 5 changes per minute
             await commands.set_status(client, 'Reached ' + str(len(client.servers)) + ' active servers!')
         else:
             await commands.set_status(client, 'Almost ' + str(config.get_server_target()) + ' active servers!')
-        await asyncio.sleep(10)
+        await asyncio.sleep(8)
         # Display current users
         users = 0
         for server in client.servers:
@@ -81,7 +81,19 @@ async def update_status(client):        # Limit of ~ 5 changes per minute
                 if not user.bot:
                     users += 1
         await commands.set_status(client, 'Serving ' + str(users) + ' users')
-        await asyncio.sleep(10)
+        await asyncio.sleep(8)
         # Display help
         await commands.set_status(client, 'start commands with $')
-        await asyncio.sleep(20)
+        await asyncio.sleep(34)
+
+
+async def get_voice_client(client, message):
+    voice_client = None
+    for vc in client.voice_clients:
+        if message.server is vc.server:
+            voice_client = vc
+    return voice_client
+
+async def check_server_statusses(servers):
+    #TODO
+    return
