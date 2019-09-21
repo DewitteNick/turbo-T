@@ -34,7 +34,7 @@ async def rotate(client):
         time.sleep(10)
 
         # Display the "Listening to $help" message for 50 seconds.
-        bot_activity.name = 'test'
+        bot_activity.name = '$help'
 
         await client.change_presence(status=bot_status, activity=bot_activity)
         time.sleep(50)
