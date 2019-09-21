@@ -33,6 +33,6 @@ async def on_ready():
     print('ID', client.user.id, sep=': ')
     print('ready timestamp', time.time(), sep=': ')
     print('------')
-    await status.rotate(discord, client)
+    await status.rotate(client)
 
 client.run(TOKEN)
