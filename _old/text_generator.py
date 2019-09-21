@@ -1,5 +1,5 @@
 import random
-import command_list
+from _old import command_list
 
 
 async def generate_response(words):

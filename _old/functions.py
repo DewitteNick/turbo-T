@@ -1,7 +1,4 @@
-import response_submitter
-import random
-import text_generator
-import commands
+from _old import text_generator, response_submitter, commands
 
 
 async def execute_command(client, message):

@@ -1,11 +1,7 @@
-import text_generator
-import response_submitter
-import command_list
+from _old import text_generator, response_submitter, functions, command_list
 import random
 import discord
-import functions
 import time
-import config
 
 
 async def help(client, message):
