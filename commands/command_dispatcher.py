@@ -22,3 +22,6 @@ async def dispatch_command(message):
     # Invoke the add_bot command.
     elif text[0] == '$add_bot':
         await command_functions.add_bot(message)
+    # Invoke the ban command.
+    elif text[0] == '$ban':
+        await command_functions.ban(message)

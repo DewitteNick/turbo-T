@@ -50,3 +50,9 @@ async def generate_add_bot_link(message):
     id = str(message.guild.me.id )
     link = 'https://discordapp.com/api/oauth2/authorize?client_id=' + id + '&permissions=' + permissions + '&scope=bot'
     return link
+
+async def get_permission_denied(message, permission):
+    if permission == 'user_cant_ban':
+        return message.author.mention + ', you seem to be a little out of your league here...'
+    elif permission == 'bot_cant_ban':
+        return message.author.mention + ', It seems I cannot be of assistance right now.\nhttps://tenor.com/view/arrowhead-australia-aussie-scifi-movie-gif-5657314'

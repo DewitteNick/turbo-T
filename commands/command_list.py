@@ -14,11 +14,11 @@ commands = {
         'help_message': 'Generate a link to add this bot to a server you own.',
         'usage': '$add_bot'
     },
-    # 'ban': {
-    #     'name': '$ban',
-    #     'help_message': 'Ban an user. Users can\'t rejoin when banned. Requires the ban user permission.',
-    #     'usage': '$ban <username> OR $ban <nickname>'
-    # },
+    'ban': {
+        'name': '$ban',
+        'help_message': 'Ban an user. Users can\'t rejoin when banned. Requires the ban user permission. Can be a username (+ optional discriminator) or nickname. username + discriminator is preferred.',
+        'usage': '$ban <username> OR $ban <nickname>'
+    },
     'broadcast': {
         'name': '$broadcast',
         'help_message': 'Send a message to all text channels you have write permission in.',
@@ -29,11 +29,6 @@ commands = {
         'help_message': 'Roll a dice with a specified # of sides. The number should be 2 or more. If no # of sides is specified, 20 is assumed',
         'usage': '$dice <number>'
     },
-    # 'server_invite': {
-    #     'name': '$server_invite',
-    #     'help_message': 'Generate a link to invite people to this server.',
-    #     'usage': '$server_invite'
-    # },
     # 'unban': {
     #     'name': '$unban',
     #     'help_message': 'Unban an user. They need to be invited afterwards. Requires the ban user permission.',
