@@ -4,6 +4,7 @@ import time
 # Import local files
 from settings import localsettings
 from commands import command_dispatcher
+from settings import bot_status
 
 print('booting turbo-T')
 print('Version:\t' + discord.__version__ + '\n')
@@ -32,5 +33,6 @@ async def on_ready():
     print('ID', client.user.id, sep=': ')
     print('ready timestamp', time.time(), sep=': ')
     print('------')
+    client.loop.create_task(bot_status.action_rotate(client))
 
 client.run(TOKEN)

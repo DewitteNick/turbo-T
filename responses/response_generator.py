@@ -1,7 +1,17 @@
 # Import Python libraries
 import random
+import discord
 # Import local files
 from commands import command_list
+
+async def bot_activity_list(client):
+    types = discord.ActivityType
+    guild_count_message = str(len(client.guilds)) + ' servers'
+
+    return [
+        {'weight': 5, 'activity': discord.Activity(**{'name': '$help', 'type': types.listening})},
+        {'weight': 1, 'activity': discord.Activity(**{'name': guild_count_message, 'type': types.listening})},
+    ]
 
 async def help_message():
     response = 'Try `$help <command>` for info about a command.'
