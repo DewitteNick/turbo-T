@@ -4,11 +4,6 @@ commands = {
         'help_message': 'Display help about a command.',
         'usage': '$help <command>'
     },
-    # '8ball': {
-    #     'name': '$8ball',
-    #     'help_message': 'Answer a yes/no question.',
-    #     'usage': '$8ball <yes/no question>'
-    # },
     'add_bot': {
         'name': '$add_bot',
         'help_message': 'Generate a link to add this bot to a server you own.',
