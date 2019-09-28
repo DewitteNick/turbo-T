@@ -11,3 +11,14 @@ async def respond_server_channels(message, reply):
 
         if author_can_write and bot_can_write:
             await channel.send(reply)
+
+async def respond_category_channels(message, reply):
+    broadcast_author = message.author
+    category = message.channel.category
+
+    for channel in category.text_channels:
+        author_can_write = channel.permissions_for(broadcast_author).send_messages
+        bot_can_write = channel.permissions_for(message.channel.guild.me).send_messages
+
+        if author_can_write and bot_can_write:
+            await channel.send(reply)

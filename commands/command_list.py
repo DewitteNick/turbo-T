@@ -21,7 +21,7 @@ commands = {
     },
     'broadcast': {
         'name': '$broadcast',
-        'help_message': 'Send a message to all text channels you have write permission in.',
+        'help_message': 'Send a message to all text channels in the current category. Requires send messages permission.',
         'usage': '$broadcast <text you want to broadcast>'
     },
     'dice': {

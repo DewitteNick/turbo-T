@@ -68,3 +68,6 @@ async def get_permission_denied(message, permission):
         return message.author.mention + ', you seem to be a little out of your league here...'
     elif permission == 'bot_cant_ban':
         return message.author.mention + ', It seems I cannot be of assistance right now.\nhttps://tenor.com/view/arrowhead-australia-aussie-scifi-movie-gif-5657314'
+    # Default permission denied message.
+    else:
+        return message.author.mention + "doesn't have what it takes."

@@ -33,7 +33,7 @@ async def dice(message):
 
 async def broadcast(message):
     text = str.strip(str.replace(message.content, '$broadcast', ''))
-    await response_submitter.respond_server_channels(message, text)
+    await response_submitter.respond_category_channels(message, text)
 
 async def add_bot(message):
     await response_submitter.respond_channel(message, await response_generator.generate_add_bot_link(message))
