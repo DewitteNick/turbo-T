@@ -9,8 +9,20 @@ async def bot_activity_list(client):
     guild_count_message = str(len(client.guilds)) + ' servers'
 
     return [
-        {'weight': 5, 'activity': discord.Activity(**{'name': '$help', 'type': types.listening})},
-        {'weight': 1, 'activity': discord.Activity(**{'name': guild_count_message, 'type': types.listening})},
+        {
+            'weight': 5,
+            'activity': discord.Activity(**{
+                'name': '$help',
+                'type': types.listening
+            })
+         },
+        {
+            'weight': 1,
+            'activity': discord.Activity(**{
+                'name': guild_count_message,
+                'type': types.listening
+            })
+        },
     ]
 
 async def help_message():
