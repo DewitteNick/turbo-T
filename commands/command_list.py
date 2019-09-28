@@ -29,11 +29,11 @@ commands = {
         'help_message': 'Roll a dice with a specified # of sides. The number should be 2 or more. If no # of sides is specified, 20 is assumed',
         'usage': '$dice <number>'
     },
-    # 'unban': {
-    #     'name': '$unban',
-    #     'help_message': 'Unban an user. They need to be invited afterwards. Requires the ban user permission.',
-    #     'usage': '$ban <username>'
-    # },
+    'unban': {
+        'name': '$unban',
+        'help_message': "Unban an user. They need to be invited afterwards. Requires the ban user permission. Nicknames don't work",
+        'usage': '$ban <username>'
+    },
 }
 
 async def get_commands():

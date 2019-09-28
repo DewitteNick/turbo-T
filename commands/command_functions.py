@@ -55,3 +55,20 @@ async def ban(message):
         # Some members can't be banned.
         except discord.Forbidden:
             await response_submitter.respond_channel(message, await response_generator.get_permission_denied(message, 'bot_cant_ban'))
+
+async def unban(message):
+    # Message if you don't have the ban permission
+    # if not message.author.server_permissions.ban_members:
+    if not message.author.guild_permissions.ban_members:
+        await response_submitter.respond_channel(message, await response_generator.get_permission_denied(message, 'user_cant_unban'))
+    else:
+        name_to_unban = str.strip(str.replace(message.content, '$unban', ''))
+        banned_members = await message.guild.bans()
+
+        for banned_member in banned_members:
+
+            username_discriminator_match = banned_member.user.name + '#' + banned_member.user.discriminator == name_to_unban
+            username_match = banned_member.user.name == name_to_unban
+
+            if username_discriminator_match or username_match:
+                await message.guild.unban(banned_member.user)

@@ -25,6 +25,8 @@ async def dispatch_command(message):
     # Invoke the ban command.
     elif text[0] == '$ban':
         await command_functions.ban(message)
+    elif text[0] == '$unban':
+        await command_functions.unban(message)
 
     # Remove the command, to keep channel cluttering to a minimum.
     await message.delete()
