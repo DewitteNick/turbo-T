@@ -19,12 +19,14 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    # If a potential command is detected, launch the command dispatcher.
     if message.content.startswith('$'):
         await command_dispatcher.dispatch_command(message)
         # Don't continue executing this function.
         return
-
-    # If no commands are detected, check if we should check a miscellaneous reply.
+    # If no potential commands are detected, check if we should send a miscellaneous reply.
+    else:
+        await command_dispatcher.dispatch_miscelaneous(message)
 
 @client.event
 async def on_ready():

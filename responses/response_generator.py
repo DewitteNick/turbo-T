@@ -71,3 +71,19 @@ async def get_permission_denied(message, permission):
     # Default permission denied message.
     else:
         return message.author.mention + "doesn't have what it takes."
+
+async def superuser_has_spoken(message):
+    replies = [
+        message.author.display_name + ' has spoken. All should abide by these words.',
+        'This is the word of our Lord.',
+    ]
+
+    return replies[random.randrange(0, len(replies))]
+
+
+async def user_used_a_bad_word(message):
+    replies = [
+        '[' + message.author.display_name + ' used a bad word.]',
+    ]
+
+    return replies[random.randrange(0, len(replies))]

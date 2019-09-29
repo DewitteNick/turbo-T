@@ -9,24 +9,33 @@ async def dispatch_command(message):
     if not command_list.command_exists(text[0]):
         await command_functions.help(message)
         return
+    else:
+        # Invoke the help command.
+        if text[0] == '$help':
+            await command_functions.help(message)
+        # Invoke the dice command.
+        elif text[0] == '$dice':
+            await command_functions.dice(message)
+        # Invoke the broadcast command.
+        elif text[0] == '$broadcast':
+            await command_functions.broadcast(message)
+        # Invoke the add_bot command.
+        elif text[0] == '$add_bot':
+            await command_functions.add_bot(message)
+        # Invoke the ban command.
+        elif text[0] == '$ban':
+            await command_functions.ban(message)
+        elif text[0] == '$unban':
+            await command_functions.unban(message)
 
-    # Invoke the help command.
-    if text[0] == '$help':
-        await command_functions.help(message)
-    # Invoke the dice command.
-    elif text[0] == '$dice':
-        await command_functions.dice(message)
-    # Invoke the broadcast command.
-    elif text[0] == '$broadcast':
-        await command_functions.broadcast(message)
-    # Invoke the add_bot command.
-    elif text[0] == '$add_bot':
-        await command_functions.add_bot(message)
-    # Invoke the ban command.
-    elif text[0] == '$ban':
-        await command_functions.ban(message)
-    elif text[0] == '$unban':
-        await command_functions.unban(message)
+        # Remove the command, to keep channel cluttering to a minimum.
+        await message.delete()
+        return
 
-    # Remove the command, to keep channel cluttering to a minimum.
-    await message.delete()
+async def dispatch_miscelaneous(message):
+    if message.channel.guild.me in message.mentions:
+        print('I have friends!')
+    elif set(message.channel.guild.me.roles).intersection(set(message.role_mentions)):
+        print('My role has friends')
+    else:
+        await command_functions.autoreply(message)

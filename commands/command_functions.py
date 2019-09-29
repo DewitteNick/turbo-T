@@ -2,6 +2,7 @@ import discord
 # Import local files
 from responses import response_submitter
 from responses import response_generator
+from settings import localsettings
 from . import command_list
 
 async def help(message):
@@ -72,3 +73,28 @@ async def unban(message):
 
             if username_discriminator_match or username_match:
                 await message.guild.unban(banned_member.user)
+
+async def autoreply(message):
+    superusers = set(localsettings.get_superusers())
+    author_identifier = message.author.name + '#' + message.author.discriminator
+
+    if author_identifier in superusers:
+        if message.content.endswith('.'):
+            await response_submitter.respond_channel(message, await response_generator.superuser_has_spoken(message))
+    else:
+
+        if not message.channel.is_nsfw():
+            message_words = str.split(message.content, ' ')
+            bad_words = localsettings.get_bad_words()
+
+            if set(bad_words).intersection(set(message_words)):
+                for index, message_word in enumerate(message_words):
+                    if message_word in bad_words:
+                        message_words[index] = await response_generator.user_used_a_bad_word(message)
+
+                censored_message = ' '.join(message_words)
+
+                try:
+                    await message.edit(**{'content': censored_message})
+                except:
+                    print('Could not modify text message.')
